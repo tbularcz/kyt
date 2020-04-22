@@ -86,10 +86,10 @@ const MyDrawer = withStyles(styles)(
           <ListItemText>Home</ListItemText>
         </ListItem>
         <ListItem button component={Link} to="/Grid" onClick={onItemClick('Page 2')}>
-          <ListItemText>Page 2</ListItemText>
+          <ListItemText>Admin</ListItemText>
         </ListItem>
         <ListItem button onClick={onItemClick('Page 3')}>
-          <ListItemText>Page 3</ListItemText>
+          <ListItemText>logout</ListItemText>
         </ListItem>
       </List>
     </Drawer>

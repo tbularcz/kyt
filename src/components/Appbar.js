@@ -1,6 +1,6 @@
 import React, { useState, Fragment } from 'react';
 import clsx from 'clsx';
-import { Router, Route, Link } from "react-router-dom";
+import { Redirect, Router, Route, Link, Switch } from "react-router-dom";
 import { createBrowserHistory } from "history";
 
 import { withStyles } from '@material-ui/core/styles';
@@ -16,6 +16,10 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import Home from "../pages/Home";
 import Grid from "../pages/Grid";
+import SignIn from "../pages/Signin";
+import Signout from "../pages/Signout";
+import PrivateRoute from "../pages/Signin";
+import {Auth} from '../pages/Signin.js'
 
 const drawerWidth = 240;
 const history = createBrowserHistory();
@@ -88,14 +92,17 @@ const MyDrawer = withStyles(styles)(
         <ListItem button component={Link} to="/Grid" onClick={onItemClick('Page 2')}>
           <ListItemText>Admin</ListItemText>
         </ListItem>
-        <ListItem button onClick={onItemClick('Page 3')}>
-          <ListItemText>logout</ListItemText>
+      <ListItem button component={Link} to="/Signout" onClick={onItemClick('Logout')}>
+          <ListItemText>Logout</ListItemText>
         </ListItem>
       </List>
     </Drawer>
+
+
     <main className={classes.content}>
         <Route exact path="/" component={Home} />
         <Route path="/grid" component={Grid} />
+        <Route path="/signout" component={Signout} />
     </main>
     </Router>
   )
@@ -115,7 +122,9 @@ function AppBarInteraction({ classes, variant }) {
     setDrawer(!drawer);
   };
 
+
   return (
+    Auth.isAuthenticated ?(
     <div className={classes.root}>
       <MyToolbar title={title} onMenuClick={toggleDrawer} />
       <MyDrawer
@@ -124,7 +133,14 @@ function AppBarInteraction({ classes, variant }) {
         onItemClick={onItemClick}
         variant={variant}
       />
+
     </div>
+  ) : (
+    <Redirect
+      to={{
+        pathname: "/login",
+      }}/>
+  )
   );
 }
 

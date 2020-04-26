@@ -6,6 +6,8 @@ import AddIcon from "@material-ui/icons/Add";
 import Icon from "@material-ui/core/Icon";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Button from "@material-ui/core/Button";
+import {Auth} from '../pages/Signin.js'
+import { Redirect } from "react-router-dom";
 
 const styles = theme => ({
   button: {
@@ -19,6 +21,7 @@ const styles = theme => ({
 const FlatButtons = props => {
   const { classes } = props;
   return (
+    Auth.isAuthenticated ? (
     <div>
       <div>
         <Button
@@ -47,6 +50,12 @@ const FlatButtons = props => {
         </Button>
       </div>
     </div>
+  ) : (
+    <Redirect
+      to={{
+        pathname: "/",
+      }}
+    />)
   );
 };
 

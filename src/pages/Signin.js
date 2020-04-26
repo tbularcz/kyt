@@ -1,4 +1,4 @@
-import React from 'react';
+
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,6 +14,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Appbar from '../components/Appbar.js'
 import Home from './Home.js'
+import Signout from './Signout.js'
+
 
 
 import {
@@ -26,7 +28,7 @@ import {
   useLocation
 } from "react-router-dom";
 
-
+import React,{ useState, Component } from 'react';
 
 function Copyright() {
   return (
@@ -71,11 +73,10 @@ export default function SignIn() {
           <AuthButton/>
            <Switch>
              <Route path="/public">
-               <PublicPage />
+               <SignIn />
              </Route>
              <PrivateRoute path="/protected">
                 <Appbar />
-                
              </PrivateRoute>
            </Switch>
           <Box mt={8}>
@@ -86,16 +87,16 @@ export default function SignIn() {
   );
 }
 
-const fakeAuth = {
+export const Auth = {
   isAuthenticated: false,
   authenticate(cb) {
-    fakeAuth.isAuthenticated = true;
-    console.log("auth")
+    Auth.isAuthenticated = true;
+    console.log("authin: ", Auth.isAuthenticated)
     setTimeout(cb, 100); // fake async
   },
   signout(cb) {
-    fakeAuth.isAuthenticated = false;
-    console.log("auth")
+    Auth.isAuthenticated = false;
+    console.log("authout", Auth.isAuthenticated)
     setTimeout(cb, 100);
   }
 };
@@ -103,7 +104,7 @@ const fakeAuth = {
 function AuthButton() {
 const classes = useStyles();
   let login = () => {
-    fakeAuth.authenticate(() => {
+    Auth.authenticate(() => {
       history.replace(from);
     });
   };
@@ -111,19 +112,16 @@ const classes = useStyles();
   let location = useLocation();
 
   let { from } = location.state || { from: { pathname: "/" } };
-
-  return fakeAuth.isAuthenticated ? (
+  console.log("authbutton: ", Auth.isAuthenticated)
+  return Auth.isAuthenticated ? (
     <p>
-      Welcome!{" "}
       <Redirect
         to={{
           pathname: "/protected",
         }}
       />
-
     </p>
   ) : (
-
     <div className={classes.paper}>
       <Avatar className={classes.avatar}>
         <LockOutlinedIcon />
@@ -188,7 +186,7 @@ function PrivateRoute({ children}) {
   return (
     <Route
       render={({ location }) =>
-        fakeAuth.isAuthenticated ? (
+        Auth.isAuthenticated ? (
           children
         ) : (
           <Redirect
@@ -201,12 +199,4 @@ function PrivateRoute({ children}) {
       }
     />
   );
-}
-
-function PublicPage() {
-  return <h3>Public</h3>;
-}
-
-function ProtectedPage() {
-  return <h3>Protected</h3>;
 }
